@@ -37,25 +37,14 @@ class Game
 
   def new_game
     loop do
-      print "Make a guess: "
-      guess = gets.chomp.upcase
-
-      unless valid_guess?(guess)
-        puts "Invalid Input. Please enter a single letter.\n\n"
-        next
-      end
-
-      if secret_word.include?(guess)
-        update_correct_letters(guess)
-      else
-        unless incorrect_letters.include?(guess)
-          incorrect_letters << guess
-          self.incorrect_guesses += 1
-        end
-      end
-    
       update_display
+      
+      print "Make a guess or save? "
+      input = gets.chomp.downcase
     
+      make_guess if input == 'guess'
+      save_game if input == 'save'
+      
       break if game_over?
     end
     
@@ -73,5 +62,48 @@ class Game
   def update_correct_letters(guess)
     positions = secret_word.each_index.select { |i| secret_word[i] == guess }
     correct_letters.map!.with_index { |letter, index| positions.include?(index) ? guess : letter }
+  end
+
+  def save_game
+    game_state = {
+      secret_word: @secret_word,
+      correct_letters: @correct_letters,
+      incorrect_letters: @incorrect_letters,
+      incorrect_guesses: @incorrect_guesses
+    }
+
+    print "Enter a name for your save file: "
+    file_name = gets.chomp
+    file_path = "./saved_games"
+
+    Dir.mkdir(file_path) unless Dir.exist?(file_path)
+    File.open("#{file_path}/#{file_name}", 'w') { |file| file.write(YAML.dump(game_state)) }
+
+    puts "\nGame has been saved in: #{file_path}/#{file_name}"
+
+    sleep 5
+  end
+
+  def make_guess
+    loop do
+      print "\nGuess: "
+      guess = gets.chomp.upcase
+
+      unless valid_guess?(guess)
+        puts "Invalid Input. Please enter a single letter."
+        next
+      end
+
+      if secret_word.include?(guess)
+        update_correct_letters(guess)
+      else
+        unless incorrect_letters.include?(guess)
+          incorrect_letters << guess
+          self.incorrect_guesses += 1
+        end
+      end
+      
+      break
+    end
   end
 end
