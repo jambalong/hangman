@@ -46,8 +46,7 @@ class Game
       end
 
       if secret_word.include?(guess)
-        positions = secret_word.each_index.select { |i| secret_word[i] == guess }
-        correct_letters.map!.with_index { |letter, index| positions.include?(index) ? guess : letter }
+        update_correct_letters(guess)
       else
         unless incorrect_letters.include?(guess)
           incorrect_letters << guess
@@ -69,5 +68,10 @@ class Game
   
   def game_won?
     secret_word == correct_letters
+  end
+
+  def update_correct_letters(guess)
+    positions = secret_word.each_index.select { |i| secret_word[i] == guess }
+    correct_letters.map!.with_index { |letter, index| positions.include?(index) ? guess : letter }
   end
 end
