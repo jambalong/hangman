@@ -12,9 +12,7 @@ class Game
   end
 
   def play
-    display_title
-    display_hangman(incorrect_guesses)
-    display_letters(correct_letters, incorrect_letters)
+    update_display
   end
 
   private
@@ -22,5 +20,11 @@ class Game
   def random_secret_word
     words = File.readlines('./google-10000-english-no-swears.txt')
     words.map(&:chomp).select { |word| word.length.between?(5, 12) }.sample.upcase
+  end
+
+  def update_display
+    display_title
+    display_hangman(incorrect_guesses)
+    display_letters(correct_letters, incorrect_letters)
   end
 end
