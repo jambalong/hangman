@@ -6,7 +6,6 @@ This project is part of The Odin Project - [Hangman](https://www.theodinproject.
 
 You will be building a command line Hangman game where one player plays against the computer, but a bit more advanced. If you’re unfamiliar with how Hangman works, see [Wikipedia](https://en.wikipedia.org/wiki/Hangman_(game)).
 
-
 1. Download the `google-10000-english-no-swears.txt` dictionary file from the first20hours GitHub repository [google-10000-english](https://raw.githubusercontent.com/first20hours/google-10000-english/master/google-10000-english-no-swears.txt).
 
 2. When a new game is started, your script should load in the dictionary and randomly select a word between 5 and 12 characters long for the secret word.
