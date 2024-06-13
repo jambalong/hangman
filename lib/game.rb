@@ -14,6 +14,7 @@ class Game
 
   def play
     update_display
+    load_game if continue?
     new_game
   end
 
@@ -33,6 +34,37 @@ class Game
 
   def valid_guess?(guess)
     guess.match?(/\p{Alpha}/) && guess.length == 1
+  end
+
+  def continue?
+    loop do
+      print "Would you like to load a save file? [y/N] "
+      input = gets.chomp.downcase
+
+      return input == 'y' ? true : false
+    end
+  end
+
+  def load_game
+    print "Enter the file name to load your save: "
+    file_name = gets.chomp.downcase
+
+    file_path = './saved_games'
+
+    if File.exist?("#{file_path}/#{file_name}")
+      begin
+        game_state = YAML.load_file("#{file_path}/#{file_name}")
+
+        @secret_word = game_state[:secret_word]
+        @correct_letters = game_state[:correct_letters]
+        @incorrect_letters = game_state[:incorrect_letters]
+        @incorrect_guesses = game_state[:incorrect_guesses]
+      rescue StandardError => e
+        puts "Error loading saved game: #{e.message}"
+      end
+    else
+      puts "File #{file_name} not found in #{file_path}"
+    end
   end
 
   def new_game
@@ -103,6 +135,7 @@ class Game
         end
       end
       
+      update_display()
       break
     end
   end
