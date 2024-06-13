@@ -25,6 +25,7 @@ class Game
   end
 
   def update_display
+    system 'clear'
     display_title
     display_hangman(incorrect_guesses)
     display_letters(correct_letters, incorrect_letters)
@@ -36,12 +37,11 @@ class Game
 
   def new_game
     loop do
-      puts "Make a guess:"
+      print "Make a guess: "
       guess = gets.chomp.upcase
 
       unless valid_guess?(guess)
-        puts "Invalid Input. Please enter a single letter."
-        sleep 1
+        puts "Invalid Input. Please enter a single letter.\n\n"
         next
       end
 
@@ -49,8 +49,10 @@ class Game
         positions = secret_word.each_index.select { |i| secret_word[i] == guess }
         correct_letters.map!.with_index { |letter, index| positions.include?(index) ? guess : letter }
       else
-        incorrect_letters << guess
-        self.incorrect_guesses += 1
+        unless incorrect_letters.include?(guess)
+          incorrect_letters << guess
+          self.incorrect_guesses += 1
+        end
       end
     
       update_display
