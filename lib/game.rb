@@ -80,7 +80,7 @@ class Game
       break if game_over?
     end
     
-    puts game_won? ? "Congratulations!" : "Game Over!"
+    puts game_won? ? "Congratulations!" : "Game Over! The secret word is: #{secret_word.join}"
   end
 
   def game_over?
